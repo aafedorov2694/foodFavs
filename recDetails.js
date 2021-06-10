@@ -1,12 +1,11 @@
-import { useNavigation } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, View, Image, Alert } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Alert, CommonActions } from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
-import randomRec from './randomRec';
-import savedRec from './savedRec';
-import searchRec from './searchRec';
+import { ThemeProvider, Card, Button } from 'react-native-elements';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
+import { theme } from './styling/theme';
 
 
 var firebaseConfig = {
@@ -19,20 +18,22 @@ var firebaseConfig = {
   appId: "1:248221142948:web:c679388398b1ce145efb31"
 };
 
-!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app()
+if (!firebase.apps.length) {
+  console.log('Connected with Firebase')
+  firebase.initializeApp(firebaseConfig);
+}
 
 
 
 export default function recDetails({route, navigation}) {
 
-  var inDB = true;
-    const {id} = route.params;
+    const {id, title} = route.params
     const [ing, setIng] = useState([]);
     const [instruction, setInstruction] = useState([]);
-    const {title} = route.params;
-    
+    const[image, setImage] = useState('');
+    const userId = firebase.auth().currentUser.uid;
      
-    useEffect (() =>{
+    useEffect (() => {
         fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/ingredientWidget.json`, {
             "method": "GET",
             "headers": {
@@ -42,124 +43,106 @@ export default function recDetails({route, navigation}) {
         .then(response => response.json())
         .then(responseJson => {
             setIng(responseJson.ingredients);
-            console.log(responseJson.ingredients)
+
              })
        
        
         .catch(err => console.log('Error: ' + err))
-    }, [])
+    }, [id])
 
     
 
     useEffect(() => {
-      fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/analyzedInstructions?stepBreakdown=true`, {
+      fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-key": "abc1e00486mshd1d3a953975f5c1p10f38cjsn3d0b1c2135c1",
+                "x-rapidapi-key": "7887e7e121msh773c9071af5fc59p16ca54jsn4a5976c8b530",
                 "x-rapidapi-host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
             }})
         .then(response => response.json())
         .then(responseJson => {
-          
-            setInstruction(responseJson[0].steps);
-          
-            console.log(responseJson[0].steps)
+            setInstruction(responseJson.instructions);
+            setImage(responseJson.image)
              })
-       
-       
         .catch(err => console.log('Error: ' + err))
-    }, [])
+    },[id])
 
     const Like = () => {
+     
+     
+      var ref = firebase.database().ref(`items/${userId}`).orderByKey();
       
-
-      firebase.database().ref('items/').on('value', snapshot => {
-          const data = snapshot.val();
-          if(data == null){
-            firebase.database().ref('items/').push(
-              {'id': id, 'ingridients': ing, 'instruction': instruction, 'title': title},
-              (error) => {
-                error? Alert.alert('Something went wrong') : Alert.alert('Recipy saved')
-              
+      ref.once("value")
+        .then(function(snapshot) {
+          console.log('UserId: ' + userId)
+          if(snapshot.exists() === false){
+            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title,}); 
+          } 
+          
+          if(snapshot.exists() === true){
+             var exist = snapshot.forEach(function(childSnapshot) {
+                var childData = childSnapshot.val().id;
+                console.log('childData: ' + childData + ' ' + 'id: ' + id)
+                if(childData === id){
+                  Alert.alert('Recipe is already saved')
+                  return true
+                } 
               });
-          } else { 
-              const prods = Object.values(data);
-              
-              
-              prods.forEach((e) => {
-                e.id == id ? inDB = true : inDB = false;
-                console.log(inDB)
-              })
-                
-      }
-    });
+         
+        }
 
-      if(inDB === false){
-        firebase.database().ref('items/').push(
-          {'id': id, 'ingridients': ing, 'instruction': instruction, 'title': title},
-          (error) => {
-            error? Alert.alert('Something went wrong') : Alert.alert('Recipy saved')
-    }
-      )} else {
-        Alert.alert('Recipy is already saved');
-        inDB = true;
-    };
-      }
+          if(exist === false) {
+            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title});
+            Alert.alert('Recipe is added to favourites')
+          }
+      });
+      
+      
+} 
   
-   
-    
-  
+
+      
   
   
     return (
-    <View style={styles.container}>
-      <Text style={{fontSize:20, margin: 10, backgroundColor: 'green', padding: 5}}>{title}</Text>
+    <ThemeProvider theme = {theme}>
+      <Text style={{fontSize:20, margin: 10, backgroundColor: 'green', padding: 20}}>{title}</Text>
     
       <FlatList
-
-        style = {{flex: 2}}
+        style ={{fontSize: 18, alignContent: 'center', paddingBottom: 50}}
         data = {ing}
         keyExtractor = {(item, index) => index.toString()}
         renderItem ={({item}) => 
-      
         <View> 
-          <Text style ={{fontSize: 15}}>{item.name}, {item.amount.metric.value} {item.amount.metric.unit} </Text>  
+          <Text style ={{fontSize: 18, alignContent: 'center'}}>{item.name}, {item.amount.metric.value} {item.amount.metric.unit} </Text>  
         </View>
-      
+        
+    
       }
-    />
-    <StatusBar style="auto" />
-
       
-    <FlatList
-
-        style = {{flex: 2}}
-        data = {instruction}
-        keyExtractor = {(item, index) => index.toString()}
-        renderItem ={({item}) => 
-
-      <View> 
-        <Text style ={{fontSize: 15}}>{item.number}. {item.step} </Text>  
-      </View>
-  }
     />
-    <Button title = 'Back' onPress = {() => navigation.reset({id:'', routes:[{name: 'Home'}]})}/>
-    <Button title = 'Like' onPress = {Like} />
 
-    <StatusBar style="auto" />
+    <Divider/>
+    <ScrollView>
+      <Card>
+        <Card.Title>Instructions</Card.Title>
+        <Card.Divider/>
       
-    </View>
+          <Text style = {{fontSize:18,padding: 20}}>{instruction}</Text>
+  
+        <Button title = 'Back' onPress = {() => {
+          navigation.setParams({
+            id: ' ',
+            ing: [],
+            instruction: [],
+            title: ''
+          });
+        navigation.goBack()}}/>
+      <Button title = 'Like' onPress = {Like} />
+
+      </Card>
+    </ScrollView> 
+    </ThemeProvider>
   );
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 50
-  },
-});
-

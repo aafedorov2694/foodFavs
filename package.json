@@ -1,7 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "set BROWSER=%Program Files%/Mozilla Firefox/firefox.exe && expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -15,8 +15,12 @@
     "@react-navigation/stack": "^5.14.4",
     "expo": "~41.0.1",
     "expo-app-auth": "~10.1.2",
+    "expo-application": "~3.1.2",
+    "expo-auth-session": "~3.2.3",
+    "expo-constants": "~10.1.3",
     "expo-google-app-auth": "^8.1.7",
     "expo-linking": "~2.2.3",
+    "expo-random": "~11.1.2",
     "expo-status-bar": "~1.0.4",
     "firebase": "8.2.3",
     "react": "16.13.1",
@@ -27,6 +31,7 @@
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
+    "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {

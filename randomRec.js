@@ -1,21 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import{ Header } from'react-native-elements';
+import{ Header, Card, ThemeProvider, ListItem } from'react-native-elements';
+
+
 
 
 export default function randomRec({route, navigation}) {
-    
-  const [recipes, setRecepies]  = useState([]);
-  const [link, setLink] = useState([]);
-  const [pictures, setPictures] = useState([]);
-  //const{user} = route.params;
 
-    
-     
+  const {searchItem} = route.params;
+  const [recipes, setRecepies]  = useState([]);
+  
+
   useEffect (() =>{
-   fetch("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=pie&number=10&offset=0", {
+   fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?type=${searchItem}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-key": "abc1e00486mshd1d3a953975f5c1p10f38cjsn3d0b1c2135c1",
@@ -24,37 +23,31 @@ export default function randomRec({route, navigation}) {
       .then(response => response.json())
       .then(responseJson => {
         setRecepies(responseJson.results);
-        setLink(responseJson);
+        console.log('Show params: ' + JSON.stringify(searchItem))
        })
-       
-       
         .catch(err => console.log('Error: ' + err))
     }, [])
 
     
    return (
-    <View style={styles.container}>
-
+    
+      <ThemeProvider>
+        <FlatList
+          data = {recipes}
+          keyExtractor = {(item, index) => index.toString()}
+          renderItem ={({item}) => 
+          <ListItem bottomDivider>
+            <Image style = {{width: 100, height:95}} source = {{uri:item.image}}/>
+            <ListItem.Content>
+              <ListItem.Title>{item.title}</ListItem.Title>
+           </ListItem.Content>
+           <Button title = 'Details' onPress = {() => navigation.navigate('recDetails', {id: item.id, title: item.title})}/>
+          </ListItem>
       
-      <Text style={{fontSize:20, margin: 30, backgroundColor: 'green', padding: 10}}>REcipy</Text>
-     
-      <FlatList
-
-        style = {{flex: 2}}
-        data = {recipes}
-        keyExtractor = {(item, index) => index.toString()}
-        renderItem ={({item}) => 
-        
-        <View> 
-          <Text style ={{fontSize: 20}}>{item.title} {item.id}</Text>  
-          <Image style = {{width: 100, height:95}} source = {{uri: `https://spoonacular.com/recipeImages/${item.image}`}}/>
-          <Button title = 'View Details' onPress = {() => navigation.navigate('recDetails', {screen: 'recDetails', params: {id: item.id, title: item.title}})}/>
-        </View>
-        
-        }
-      />
-      <StatusBar style="auto" />
-    </View>
+          }
+        />
+        <StatusBar style="auto" />
+      </ThemeProvider>
   );
 }
 
