@@ -15,8 +15,13 @@ import signup from './auth/signup';
 import signin from './auth/signin';
 import welcome from './auth/welcome';
 import profile from './auth/profile';
+import { useEffect, useState } from 'react/cjs/react.development';
 
 
+if (!firebase.apps.length) {
+  console.log('Connected with Firebase')
+  firebase.initializeApp(firebaseConfig);
+}
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,6 +34,9 @@ if (!firebase.apps.length) {
 
 
 function Drawers() {
+
+
+
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="First Page" component={firstPage} />
@@ -41,26 +49,43 @@ function Drawers() {
 }
 
 export default function App() {
-
   
+  const[isSigned, setIsSigned] = useState(null)
+ useEffect(() => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if(user) {
+      setIsSigned(true)
+    } else { 
+      setIsSigned(false)
+    }
+    console.log('isSigned: ' + isSigned)
+  })
+
+ }, [])
+  
+
   return (
 
     <NavigationContainer>
      <Stack.Navigator initialRouteName = 'Welcome'>
-     <Stack.Screen name = 'Welcome' component={welcome}/>
-     <Stack.Screen  
-        name="Drawers" 
-        component={Drawers}
-        />
-      <Stack.Screen  name="recDetails" component={recDetails}/> 
-      <Stack.Screen  name="Random Recipe" component={randomRec}/>
-      <Stack.Screen name = 'Search' component={searchRec}/>
-      <Stack.Screen name = 'SignIn' component={signin}/>
-      <Stack.Screen  name="SignUp" component={signup}/> 
-
-
-
-
+       {isSigned === true ? (
+          <>   
+          <Stack.Screen  
+            name="Drawers" 
+            component={Drawers}
+              />
+            <Stack.Screen  name="recDetails" component={recDetails}/> 
+            <Stack.Screen  name="Random Recipe" component={randomRec}/>
+            <Stack.Screen name = 'Search' component={searchRec}/>
+          </>
+          ) : (
+            <>
+               <Stack.Screen name = 'Welcome' component={welcome}/>
+              <Stack.Screen name = 'SignIn' component={signin}/>
+              <Stack.Screen  name="SignUp" component={signup}/> 
+            </>
+            )
+         }
       </Stack.Navigator>
     </NavigationContainer>
 

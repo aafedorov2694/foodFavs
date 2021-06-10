@@ -36,8 +36,6 @@ export default function SignUp ({navigation, route}) {
                      displayName: name
                  })
                
-               navigation.navigate('Drawers', {screen:'First Page'})
-
             })
             
              .catch((error) => {

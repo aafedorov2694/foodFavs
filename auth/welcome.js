@@ -11,9 +11,6 @@ export default function SignUp ({navigation, route}) {
     return(
 
         <ThemeProvider theme = {login}>
-           
-           
-            
             <Button
                 title='Sign in'
                 onPress = {() => navigation.navigate('SignIn')}
@@ -23,12 +20,6 @@ export default function SignUp ({navigation, route}) {
                 title='Sign up'
                 onPress = {() => navigation.navigate('SignUp')}
             />
-
-            
-
-
-
-
         </ThemeProvider>
 
 

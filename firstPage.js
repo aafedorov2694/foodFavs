@@ -17,16 +17,7 @@ export default function firstPage ({route, navigation})  {
     ];
 const user = route.params;
     const [search, setSearch] = useState('');
-    const signOut = () => {
-        firebase.auth().signOut().then(() => {
-            navigation.navigate('App', {screen: 'Welcome'})
-          }).catch((error) => {
-            console.log(error)
-          });
     
-    }
-
-
     return(
         <ThemeProvider theme = {theme} >
             <Input
@@ -38,12 +29,6 @@ const user = route.params;
             onPress = {() => navigation.navigate('Search', {search: search})}
            />
 
-            <Button
-                title='Sign out'
-                onPress = {signOut}
-            
-            />
-           
            
             <FlatList
                 style = {{flex: 2}}

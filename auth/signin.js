@@ -21,7 +21,6 @@ export default function SignUp ({navigation, route}) {
                  console.log(user);
                  
             },
-                navigation.navigate('Drawers', {screen:'First Page'})
             )
 
              .catch((error) => {

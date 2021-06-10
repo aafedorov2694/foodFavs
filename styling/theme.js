@@ -62,5 +62,7 @@ export const login = {
             paddingLeft: 100,
         }
     },
+
+
 } 
 
