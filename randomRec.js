@@ -14,7 +14,7 @@ export default function randomRec({route, navigation}) {
   
 
   useEffect (() =>{
-   fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?type=${searchItem}`, {
+   fetch(`${searchItem}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-key": "abc1e00486mshd1d3a953975f5c1p10f38cjsn3d0b1c2135c1",
@@ -23,7 +23,7 @@ export default function randomRec({route, navigation}) {
       .then(response => response.json())
       .then(responseJson => {
         setRecepies(responseJson.results);
-        console.log('Show params: ' + JSON.stringify(searchItem))
+        console.log('Show params: ' + JSON.stringify(responseJson.results))
        })
         .catch(err => console.log('Error: ' + err))
     }, [])

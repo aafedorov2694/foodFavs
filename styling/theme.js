@@ -63,6 +63,12 @@ export const login = {
         }
     },
 
+    Text: {
+        h1Style:{
+            fontSize: 40,
+        }
+    }
+
 
 } 
 

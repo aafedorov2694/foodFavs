@@ -29,7 +29,7 @@ export default function recDetails({route, navigation}) {
 
     const {id, title} = route.params
     const [ing, setIng] = useState([]);
-    const [instruction, setInstruction] = useState([]);
+    const [instruction, setInstruction] = useState('');
     const[image, setImage] = useState('');
     const userId = firebase.auth().currentUser.uid;
      
@@ -56,13 +56,14 @@ export default function recDetails({route, navigation}) {
       fetch(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-key": "7887e7e121msh773c9071af5fc59p16ca54jsn4a5976c8b530",
+                "x-rapidapi-key": "abc1e00486mshd1d3a953975f5c1p10f38cjsn3d0b1c2135c1",
                 "x-rapidapi-host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
             }})
         .then(response => response.json())
         .then(responseJson => {
             setInstruction(responseJson.instructions);
-            setImage(responseJson.image)
+            setImage(responseJson.image);
+            console.log('Image: ' + responseJson.image);
              })
         .catch(err => console.log('Error: ' + err))
     },[id])
@@ -74,9 +75,8 @@ export default function recDetails({route, navigation}) {
       
       ref.once("value")
         .then(function(snapshot) {
-          console.log('UserId: ' + userId)
           if(snapshot.exists() === false){
-            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title,}); 
+            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title, 'image': image}); 
           } 
           
           if(snapshot.exists() === true){
@@ -92,7 +92,7 @@ export default function recDetails({route, navigation}) {
         }
 
           if(exist === false) {
-            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title});
+            firebase.database().ref(`items/${userId}`).push({'id': id, 'title': title, 'image': image});
             Alert.alert('Recipe is added to favourites')
           }
       });
