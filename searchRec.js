@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { ThemeProvider, ListItem, Image, Button } from 'react-native-elements';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { FlatList } from 'react-native-gesture-handler';
+import { Pressable } from 'react-native';
 
 
 export default function searchRec({route, navigation}) {
@@ -36,13 +37,14 @@ export default function searchRec({route, navigation}) {
         data = {findings}
         keyExtractor = {(item, index) => index.toString()}
         renderItem ={({item}) => 
-        <ListItem bottomDivider>
-        <Image style = {{width: 100, height:95}} source = {{uri:`https://spoonacular.com/recipeImages/${item.image}`}}/>
-        <ListItem.Content>
-          <ListItem.Title>{item.title}</ListItem.Title>
-        </ListItem.Content>
-        <Button title = 'Details' onPress = {() => navigation.navigate('recDetails', {id: item.id, title: item.title})}/>
-      </ListItem>
+        <Pressable onPress = {() => navigation.navigate('recDetails', {id: item.id, title: item.title})}>
+          <ListItem bottomDivider>
+          <Image style = {{width: 100, height:95}} source = {{uri:`https://spoonacular.com/recipeImages/${item.image}`}}/>
+          <ListItem.Content>
+            <ListItem.Title>{item.title}</ListItem.Title>
+          </ListItem.Content>
+        </ListItem>
+      </Pressable>
                     
         }
       />

@@ -33,9 +33,6 @@ export default function Profile({navigation, route}) {
           });
     }
 
-  
-
-    
     
     return(
 

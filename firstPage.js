@@ -6,6 +6,7 @@ import Icon  from 'react-native-vector-icons';
 import { useState } from 'react/cjs/react.development';
 import {theme} from './styling/theme';
 import * as firebase from 'firebase';
+import { Pressable } from 'react-native';
 
 export default function firstPage ({route, navigation})  {
  const foodType = [
@@ -18,15 +19,32 @@ export default function firstPage ({route, navigation})  {
 const user = route.params;
     const [search, setSearch] = useState('');
     
+    const toggleMenu = () => {
+       return( <Button
+        onPress = {() => navigation.toggleDrawer()}
+        icon={{
+          name: "menu",
+          color: '#fff'
+        }}/>
+       )
+    }
+
     return(
         <ThemeProvider theme = {theme} >
+            <Header 
+            placement="left"
+            leftComponent={toggleMenu}
+            centerComponent={{ text: 'Explore', style: { color: '#fff' } }}
+            rightComponent={{ icon: 'home', color: '#fff' }}/>
+
+           
             <Input
                 placeholder = 'Search recipy'
                 onChangeText = {(text) => setSearch(text)}
             />  
             <Button
             title = 'Search'
-            onPress = {() => navigation.navigate('Search', {search: search})}
+            onPress = {() => navigation.navigate('Stacks', {screen: 'Search', params: {search: search}})}
            />
 
            
@@ -35,6 +53,11 @@ const user = route.params;
                 data = {foodType}
                 keyExtractor = {(item, index) => index.toString()}
                 renderItem ={({item}) => 
+                <Pressable
+                    onPress = {
+                        () => navigation.navigate('Stacks', {screen:'Random Recipe', params:{searchItem: item.link}})
+                    }
+                >
                     <Card>
                     <Card.Title>{item.title}</Card.Title>
                     <Card.Divider/>
@@ -45,10 +68,12 @@ const user = route.params;
                         title = 'Look up'
                         onPress = {() => navigation.navigate('Random Recipe', {searchItem: item.link})}
                     />
-                </Card>
+                    </Card>
+                </Pressable>
                 }
             
             />
+            
            
 
         </ThemeProvider>

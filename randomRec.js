@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Pressable } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import{ Header, Card, ThemeProvider, ListItem } from'react-native-elements';
 
@@ -36,13 +36,14 @@ export default function randomRec({route, navigation}) {
           data = {recipes}
           keyExtractor = {(item, index) => index.toString()}
           renderItem ={({item}) => 
-          <ListItem bottomDivider>
-            <Image style = {{width: 100, height:95}} source = {{uri:item.image}}/>
-            <ListItem.Content>
-              <ListItem.Title>{item.title}</ListItem.Title>
-           </ListItem.Content>
-           <Button title = 'Details' onPress = {() => navigation.navigate('recDetails', {id: item.id, title: item.title})}/>
-          </ListItem>
+          <Pressable onPress = {() => navigation.navigate('recDetails', {id: item.id, title: item.title})}>
+            <ListItem bottomDivider>
+              <Image style = {{width: 100, height:95}} source = {{uri:item.image}}/>
+              <ListItem.Content>
+                <ListItem.Title>{item.title}</ListItem.Title>
+            </ListItem.Content>
+            </ListItem>
+          </Pressable>
       
           }
         />
