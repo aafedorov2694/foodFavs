@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,7 +17,7 @@ import welcome from './auth/welcome';
 import profile from './auth/profile';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { Pressable } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { Divider, Header} from 'react-native-elements';
 
 
 if (!firebase.apps.length) {
@@ -40,18 +40,24 @@ function Stacks() {
   )
 }
 
-function Drawers() {
-
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen name = 'Welcome' component={welcome}/>
-      <Drawer.Screen name = 'SignIn' component={signin}/>
-      <Drawer.Screen  name="SignUp" component={signup}/> 
-
-    </Drawer.Navigator>
+function Menu(){
   
-  );
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="Explore" component={firstPage}/>
+      <Stack.Screen name="Favourite recipes" component={savedRec} />
+      <Stack.Screen name="Profile" component={profile} />
+      <Stack.Screen  
+              name="Stacks" 
+              component={Stacks}
+              
+                />
+    </Stack.Navigator>
+  )
+
 }
+
+
 
 export default function App() {
   
@@ -72,38 +78,38 @@ export default function App() {
     
     return(
         <DrawerContentScrollView {... props}>
-           {isSigned === true ? (
-             <>
-              <DrawerItem
-                label = {firebase.auth().currentUser.displayName}
-                labelStyle = {{paddingBottom: 30, textDecorationLine: 'underline', textAlign: 'center'}}
+        <View style={{backgroundColor: 'blue', paddingTop: 10}}>
+         <DrawerItem
+          label = {firebase.auth().currentUser.displayName}
+          labelStyle = {{paddingBottom: 30, textDecorationLine: 'underline', textAlign: 'center'}}
+         />
+         </View>
 
+
+          <DrawerItem 
+            label = 'Explore'
+            onPress = {() => props.navigation.navigate('Menu', {screen: 'Explore'})}
+            
+            />
+           
+          <DrawerItem 
+            label = 'Favourites'
+            onPress = {() => props.navigation.navigate('Menu', {screen: 'Favourite recipes'})} />
+          <DrawerItem 
+            label = 'Profile'
+            onPress = {() => props.navigation.navigate('Menu', {screen: 'Profile'})} />
               
-              />
-              <Divider/>
-              <DrawerItem 
-                label = 'Explore'
-                onPress = {() => props.navigation.navigate('Explore')} />
-              <DrawerItem 
-                label = 'Favourites'
-                onPress = {() => props.navigation.navigate('Favourite recipes')} />
-              <DrawerItem 
-                label = 'Profile'
-                onPress = {() => props.navigation.navigate('Profile')} />
-              
+          <View style = {{marginTop: 450}}>
+            <DrawerItem
+              labelStyle = {{textAlignVertical: 'bottom', textDecorationLine: 'underline'}}
+              label = 'Sign out'
+              onPress = {() => firebase.auth().signOut().then(() => {
 
-              <DrawerItem
-                labelStyle = {{marginTop: 470, textDecorationLine: 'underline'}}
-                label = 'Sign out'
-                onPress = {() => firebase.auth().signOut().then(() => {
-
-                }).catch((error) => {
-                    console.log(error)
-                  })} /> 
-              </> ) : (
-                Drawers()
-              )
-              }
+                  }).catch((error) => {
+                      console.log(error)
+                    })} />
+          </View>
+             
         </DrawerContentScrollView>
      
     )
@@ -111,34 +117,33 @@ export default function App() {
   
 
   return (
+    
+    
 
     <NavigationContainer>
-     <Drawer.Navigator 
-      drawerContent={props => <CustomDrawerContent {...props}
-      style={{backgroundColor: '#36846b'}} />}>
-       {isSigned === true ? (
-          <>   
-          <Drawer.Screen name="Explore" component={firstPage} />
-          <Drawer.Screen name="Favourite recipes" component={savedRec} />
-          <Drawer.Screen name="Profile" component={profile} />
-
+      {isSigned === true ? (
+        <Drawer.Navigator 
+        drawerContent={props => <CustomDrawerContent {...props}
+        style={{backgroundColor: '#36824r'}} />}>
+          <Drawer.Screen name="Menu" component={Menu}/>
           <Drawer.Screen  
-            name="Stacks" 
-            component={Stacks}
-            options={{
-              drawerLabel: () => null,
-            }}
-              />
-          </>
-          ) : (
-            <>
-              <Drawer.Screen name = 'Welcome' component={welcome}/>
-              <Drawer.Screen name = 'SignIn' component={signin}/>
-              <Drawer.Screen  name="SignUp" component={signup}/> 
-            </>
-            )
-         }
-      </Drawer.Navigator>
+              name="Stacks" 
+              component={Stacks}
+              
+                />
+
+          
+        </Drawer.Navigator>
+
+      ):(
+        <Stack.Navigator>
+          <Stack.Screen name = 'Welcome' component={welcome}/>
+          <Stack.Screen name = 'SignIn' component={signin}/>
+          <Stack.Screen  name="SignUp" component={signup}/> 
+        </Stack.Navigator>
+      )}
+
+
     </NavigationContainer>
 
   );

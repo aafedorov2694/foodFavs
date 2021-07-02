@@ -31,13 +31,7 @@ const user = route.params;
 
     return(
         <ThemeProvider theme = {theme} >
-            <Header 
-            placement="left"
-            leftComponent={toggleMenu}
-            centerComponent={{ text: 'Explore', style: { color: '#fff' } }}
-            rightComponent={{ icon: 'home', color: '#fff' }}/>
-
-           
+                      
             <Input
                 placeholder = 'Search recipy'
                 onChangeText = {(text) => setSearch(text)}
