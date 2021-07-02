@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, CustomDrawerContent, DrawerView} from '@react-navigation/drawer';
@@ -28,14 +28,28 @@ if (!firebase.apps.length) {
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+const toggleMenu = () => {
+  return( <Button
+   onPress = {() => navigation.toggleDrawer()}
+   icon={{
+     name: "menu",
+     color: '#fff'
+   }}/>
+  )
+}
+
 
 function Stacks() {
 
   return(
     <Stack.Navigator>
-      <Stack.Screen  name="recDetails" component={recDetails}/> 
+      <Stack.Screen  
+        name="recDetails" 
+        component={recDetails}
+       
+        /> 
       <Stack.Screen  name="Random Recipe" component={randomRec}/>
-      <Stack.Screen name = 'Search' component={searchRec}/>
+      <Stack.Screen name = 'Search' component={searchRec} options={{headerShown: false}}/>
     </Stack.Navigator>
   )
 }
@@ -43,16 +57,21 @@ function Stacks() {
 function Menu(){
   
   return(
-    <Stack.Navigator>
-      <Stack.Screen name="Explore" component={firstPage}/>
-      <Stack.Screen name="Favourite recipes" component={savedRec} />
-      <Stack.Screen name="Profile" component={profile} />
-      <Stack.Screen  
+    <Drawer.Navigator>
+      <Drawer.Screen 
+        name="Explore" 
+        component={firstPage}
+        options={{headerShown: true}}
+        />
+      <Drawer.Screen name="Favourite recipes" component={savedRec} options={{headerShown: true}} />
+      <Drawer.Screen name="Profile" component={profile} options={{headerShown: true}}/>
+      <Drawer.Screen  
               name="Stacks" 
               component={Stacks}
+              options={{headerShown: false}}
               
                 />
-    </Stack.Navigator>
+    </Drawer.Navigator>
   )
 
 }
@@ -129,6 +148,7 @@ export default function App() {
           <Drawer.Screen  
               name="Stacks" 
               component={Stacks}
+              options={{headerShown: false}}
               
                 />
 

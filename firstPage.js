@@ -31,7 +31,9 @@ const user = route.params;
 
     return(
         <ThemeProvider theme = {theme} >
-                      
+            
+
+           
             <Input
                 placeholder = 'Search recipy'
                 onChangeText = {(text) => setSearch(text)}
