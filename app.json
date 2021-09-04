@@ -28,7 +28,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "",
+    "description": "Student project for Mobile Development course at Haaga-Helia UAS",
     "githubUrl": "https://github.com/aafedorov2694/foodFavs"
   }
 }
