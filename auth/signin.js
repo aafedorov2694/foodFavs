@@ -1,63 +1,56 @@
 import React from 'react';
-import { ThemeProvider, Button, Input} from 'react-native-elements';
+import { ThemeProvider, Button, Input } from 'react-native-elements';
 import { useState } from 'react/cjs/react.development';
 import * as firebase from 'firebase';
-import {login} from '../styling/theme';
+import { login } from '../styling/theme';
 import { Alert } from 'react-native';
 
-export default function SignUp ({navigation, route}) {
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
+
+
+export default function SignUp({ navigation, route }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const createUser = () => {
 
-        
-      
         firebase.auth().signInWithEmailAndPassword(email, password)
-            
+
             .then((userCredential) => {
-                 var user = userCredential.user;
-                 
-                 console.log(user);
-                 
+                var user = userCredential.user;
+                navigation.navigate('Splash')
             },
             )
 
-             .catch((error) => {
+            .catch((error) => {
                 navigation.navigate('SignIn')
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 Alert.alert(errorMessage);
-                
-                
+
+
             })
-           
     }
 
-  
-    
 
-    
-    
-    return(
+    return (
 
-        <ThemeProvider theme = {login}>
-            <Input style = {{paddingTop: 250}}
-                placeholder = 'Email'
-                onChangeText = {(value) => setEmail(value)}
+        <ThemeProvider theme={login}>
+            <Input style={{ paddingTop: 250 }}
+                placeholder='Email'
+                onChangeText={(value) => setEmail(value)}
             />
-             <Input 
-                placeholder = 'Password'
-                onChangeText = {(value => setPassword(value))}
-                secureTextEntry = {true}
+            <Input
+                placeholder='Password'
+                onChangeText={(value => setPassword(value))}
+                secureTextEntry={true}
             />
 
             <Button
                 title='Sign in'
-                onPress = {createUser}
-            
+                onPress={createUser}
+
             />
-            
+
 
 
         </ThemeProvider>

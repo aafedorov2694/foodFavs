@@ -1,45 +1,39 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View, Text} from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
-import { useNavigationState} from '@react-navigation/native';
 
 
-export default function Splash({ navigation, route }) {
+export default function Splash({ navigation }) {
 
-  const index = useNavigationState(state => state);
 
-    useEffect(
-        () => {
-         firebase.auth().onAuthStateChanged((user) => {
-           if (user) {
-            navigation.navigate('Menu');
-           } else {
-            navigation.navigate('Welcome');
+  useEffect(
+    () => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user !== null) {
+          
+        } else {
+          navigation.navigate('AuthScreens', { screen: 'Welcome' })
+        }
+      });
 
-           }
-         });
-       }
-     );
+    },
+    []);
 
 
   return (
-    <View style={[styles.container, styles.horizontal]} >
-        <ActivityIndicator size="large"/>
-        <Text>
-          SPLASH
-          SPLASH
-          SPLASH
-        </Text>
+    <View style={styles.horizontal} >
+      <ActivityIndicator size={100} color="#36846b" />
     </View>
   );
 }
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center"
-    },
-    horizontal: {
-      justifyContent: "center",
-      padding: 10
-    }
-  });
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 300
+  }
+});

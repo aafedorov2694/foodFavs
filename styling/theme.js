@@ -1,29 +1,78 @@
-import {ThemeProvider, Button}  from 'react-native-elements';
+
 
 export const theme =  {
+
+    
+    
+    View: {
+        container:{
+        paddingBottom: 20,
+        }
+    },
+
+    TextInput:{
+        inputContainerStyle: {
+            borderColor: 'grey',
+            outlineWidth: 2,
+            marginTop: 5,
+        }
+    },
+
     Button: {
         buttonStyle:{
             backgroundColor: '#36846b',
+            marginTop: 20,
         },
+    },
         
-        titleStyle:{
 
+    Tile:{
+        
+        imageContainerStyle:{
+                
+            borderRadius: 10,
+            opacity: 0.99,
+
+
+        },
+        containerStyle:{
+            marginTop: 30,
+            marginBottom: 30,
+            marginRight: 'auto',
+            marginLeft: 'auto',
+            width: 400,
+           
+        },
+
+        titleStyle:{
+            textAlign: 'center',
+            fontFamily: 'Arial',
+            fontStyle: 'italic',
+            color: 'grey',
         }
-          
+        
+       
+     
+    },
+
+    CardTitle:{
+
     },
 
     Card:{
-        containerStyle:{
-            margin: 40,
-            borderRadius: 15,
-            borderColor: '#d68438',
-            backgroundColor: "#f1b24b",
-            
         
-        },
-        wrapperStyle: {
-            fontSize: 30,
-        },      
+            
+            containerStyle:{
+                margin: 30,
+                borderRadius: 9,
+                borderColor: '#d68438',
+                backgroundColor: "#f1b24b",
+
+                
+            
+            },
+           
+       
         
     },
 
@@ -35,14 +84,25 @@ export const theme =  {
     },
 
     Text:{
-        h4:{
-           fontSize: 10,
+
+        h3Style:{
+            fontSize: 40,
         },
+        
+        style:{
+            fontSize: 18,
+            textAlign: 'left',
+            lineHeight: 25,
+            
+        }
 
     }
 }
 
+
+
 export const login = {
+    
     Input:{
         containerStyle:{
             borderColor: 'green',
@@ -69,6 +129,5 @@ export const login = {
         }
     }
 
-
-} 
+}
 
