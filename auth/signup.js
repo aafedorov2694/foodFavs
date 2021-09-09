@@ -1,31 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider, Button, Input } from 'react-native-elements';
-import { useState } from 'react/cjs/react.development';
 import * as firebase from 'firebase';
 import "firebase/firestore";
 import { login } from '../styling/theme';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 
-
-var firebaseConfig = {
-  apiKey: "AIzaSyBVwG1pX_vDuJFxatenqzSQiVhwKL6MP3U",
-  authDomain: "foodfavs-b35b7.firebaseapp.com",
-  databaseURL: "https://foodfavs-b35b7-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "foodfavs-b35b7",
-  storageBucket: "foodfavs-b35b7.appspot.com",
-  messagingSenderId: "248221142948",
-  appId: "1:248221142948:web:c679388398b1ce145efb31"
-};
-
-if (!firebase.apps.length) {
-  console.log('Connected with Firebase')
-  firebase.initializeApp(firebaseConfig);
-}
 
 export default function SignUp({ navigation, route }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    console.log('Firebase app: ' + firebase.apps)
+  })
 
 
 
@@ -51,28 +39,31 @@ export default function SignUp({ navigation, route }) {
   return (
 
     <ThemeProvider theme={login}>
-      <Input
-        placeholder='Name'
-        onChangeText={(value => setName(value))}
-      />
+      <View style = {{paddingTop: 200}}>
+        <Input
+          placeholder='Name'
+          onChangeText={(value => setName(value))}
+        />
 
 
-      <Input style={{ paddingTop: 250 }}
-        placeholder='Email'
-        onChangeText={(value) => setEmail(value)}
-      />
-      <Input
-        placeholder='Password'
-        onChangeText={(value => setPassword(value))}
-        secureTextEntry={true}
-      />
+        <Input
+          style = {{paddingTop: 50}}
+          placeholder='Email'
+          onChangeText={(value) => setEmail(value)}
+        />
+        <Input
+          placeholder='Password'
+          onChangeText={(value => setPassword(value))}
+          secureTextEntry={true}
+        />
 
 
-      <Button
-        title='Sign up'
-        onPress={createUser}
+        <Button
+          title='Sign up'
+          onPress={createUser}
 
-      />
+        />
+      </View>
 
 
 

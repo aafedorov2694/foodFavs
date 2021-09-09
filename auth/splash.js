@@ -10,7 +10,6 @@ export default function Splash({ navigation }) {
     () => {
       firebase.auth().onAuthStateChanged((user) => {
         if (user !== null) {
-          
         } else {
           navigation.navigate('AuthScreens', { screen: 'Welcome' })
         }

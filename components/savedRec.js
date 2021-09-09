@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList, StyleSheet, Pressable } from 'react-native';
+import { FlatList, Pressable } from 'react-native';
 import { Card, ThemeProvider, ListItem } from 'react-native-elements';
 import { useEffect, useState } from 'react/cjs/react.development';
 import * as firebase from 'firebase';
@@ -44,7 +44,7 @@ export default function savedRec({ navigation }) {
         }
         renderItem={({ item }) =>
 
-          <Pressable onPress={() => navigation.navigate('Stacks', { screen: 'SavedDetails', params: { id: item.id, title: item.title } })}>
+          <Pressable onPress={() => navigation.navigate('SavedDetails', { id: item.id, title: item.title })}>
             <ListItem bottomDivider>
               <Image style={{ width: 100, height: 95 }} source={{ uri: item.image }} />
               <ListItem.Content>

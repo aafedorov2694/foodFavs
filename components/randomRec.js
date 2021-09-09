@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState, useFocusEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, Image, Button, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Image, Pressable } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Header, Card, ThemeProvider, ListItem } from 'react-native-elements';
+import { ThemeProvider, ListItem } from 'react-native-elements';
 
 
 
@@ -29,9 +29,10 @@ export default function randomRec({ route, navigation }) {
   }, [searchItem])
 
 
-  return (
+  return (  
 
     <ThemeProvider>
+      
       <FlatList
         data={recipes}
         keyExtractor={(item, index) => index.toString()}

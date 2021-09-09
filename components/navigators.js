@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import firebaseConfig from '../configs/firebaseConf';
 import { NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, CustomDrawerContent, DrawerView} from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 
 

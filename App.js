@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import randomRec from './components/randomRec';
 import savedRec from './components/savedRec';
 import recDetails from './components/recDetails'
 import firstPage from './components/firstPage';
 import * as firebase from 'firebase';
-import firebaseConfig from './configs/firebaseConf';
 import searchRec from './components/searchRec';
 import signup from './auth/signup';
 import signin from './auth/signin';
@@ -16,19 +14,24 @@ import welcome from './auth/welcome';
 import profile from './auth/profile';
 import Splash from './auth/splash';
 import savedRecDetails from './components/savedRecDetails';
-
-
-if (!firebase.apps.length) {
-  console.log('Connected with Firebase')
-  firebase.initializeApp(firebaseConfig);
-}
+import { firebaseConfig } from './configs/firebaseConfig';
+import { TabBar } from './styling/tabStyle'
+import { Icon } from 'react-native-elements/dist/icons/Icon'
 
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
 
 
 export default function App() {
+
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    console.log('Typeof: ' + typeof firebase.apps)
+  } else {
+    firebase.app();
+  }
 
   const [isSigned, setIsSigned] = useState(false)
 
@@ -42,19 +45,46 @@ export default function App() {
     })
   }, [])
 
+
+
   return (
     <NavigationContainer>
+
       {isSigned == true ? (
-        <Drawer.Navigator
-          drawerContent={(props, route) => <CustomDrawerContent {...props} {...route}
-            style={{ backgroundColor: '#36824r' }}
-          />}
-        >
-          <Drawer.Screen
-            name='Drawers'
-            component={Drawers}
+        <Tab.Navigator>
+          <Tab.Screen
+            name='Explore'
+            component={Explore}
+            options={{
+              tabBarLabel: 'Explore',
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="search" color={color} size={size} />
+              ),
+            }}
           />
-        </Drawer.Navigator>
+          <Tab.Screen
+            name='Favs'
+            component={Favs}
+            options={{
+              tabBarLabel: 'Favourites',
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="favorite" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name='Profile'
+            component={Profile}
+            options={{
+              tabBarLabel: 'Profile',
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="person" color={color} size={size} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+
+
       ) : (
         <Stack.Navigator>
           <Stack.Screen
@@ -71,6 +101,16 @@ export default function App() {
 
 }
 
+function Profile() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name='Profile'
+        component={profile}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function AuthScreens() {
   return (
@@ -102,28 +142,27 @@ function AuthScreens() {
   )
 }
 
-function Stacks() {
-
+function Explore() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="recDetails"
+        name='Explore'
+        component={firstPage}
+      />
+      <Stack.Screen
+        name='recDetails'
         component={recDetails}
         options={({ route }) => ({
           title: route.params.title,
+          headerTitleAlign: 'center',
         })}
       />
       <Stack.Screen
         name="Random Recipe"
         component={randomRec}
-        options={({ navigation, route }) => ({
-          title: route.params.title,
-          headerLeft: () => (
-            <HeaderBackButton onPress={() => navigation.reset({
-              index: 0,
-              routes: [{ name: 'Menu' }]
-            })} />
-          ),
+        options={({ route }) => ({
+          headerTitle: route.params.title,
+          headerTitleAlign: 'center',
         })}
       />
       <Stack.Screen
@@ -132,100 +171,29 @@ function Stacks() {
         options={({ navigation, route }) => ({
           headerLeft: () => (
             <HeaderBackButton onPress={
-              () => { navigation.setParams(route.params.search = ' '); navigation.navigate('Menu', { screen: 'Explore' })}} />
+              () => { navigation.setParams(route.params.search = ' '); navigation.navigate('Explore') }} />
           ),
         })}
       />
-      <Stack.Screen
-        name='SavedDetails'
-        component={savedRecDetails}
-        options={({ navigation, route }) => ({
-          title: route.params.title,
-          headerLeft: () => (
-            <HeaderBackButton onPress={() => navigation.navigate('Menu', { screen: 'Favourite recipes' })} />
-          ),
-        })} />
-
     </Stack.Navigator>
   )
 }
 
-function Menu() {
-
-
+function Favs() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen
-        name="Explore"
-        component={firstPage}
-        options={{ headerShown: true }}
-      />
-      <Drawer.Screen
-        name="Favourite recipes"
+    <Stack.Navigator>
+      <Stack.Screen
+        name='Favourites'
         component={savedRec}
-        options={{ headerShown: true }} />
-      <Drawer.Screen
-        name="Profile"
-        component={profile}
-        options={{ headerShown: true }} />
-      <Drawer.Screen
-        name="Stacks"
-        component={Stacks}
-        options={{ headerShown: false }}
       />
-
-    </Drawer.Navigator>
-  )
-}
-
-const CustomDrawerContent = (props) => {
-
-  return (
-
-    <DrawerContentScrollView {...props} >
-
-      <DrawerItem
-        label='Explore'
-        onPress={() => props.navigation.navigate('Menu', { screen: 'Explore' })}
+      <Stack.Screen
+        name='SavedDetails'
+        component={savedRecDetails}
+        options={({ route }) => ({
+          headerTitle: route.params.title,
+        })}
       />
-      <DrawerItem
-        label='Favourites'
-        onPress={() => props.navigation.navigate('Menu', { screen: 'Favourite recipes' })}
-      />
-      <DrawerItem
-        label='Profile'
-        onPress={() => props.navigation.navigate('Menu', { screen: 'Profile' })}
-      />
-
-      <View style={{ marginTop: 450 }}>
-        <DrawerItem
-          labelStyle={{ textAlignVertical: 'bottom', textDecorationLine: 'underline' }}
-          label='Sign out'
-          onPress={() => firebase.auth().signOut()
-            .then()
-            .catch((error) => {
-              console.log(error)
-            })} />
-      </View>
-    </DrawerContentScrollView>
-
-  )
-}
-
-function Drawers() {
-  return (
-    <Drawer.Navigator>
-
-      <Drawer.Screen
-        name="Menu"
-        component={Menu}
-      />
-      <Drawer.Screen
-        name="Stacks"
-        component={Stacks}
-        options={{ headerShown: false }}
-      />
-    </Drawer.Navigator>
+    </Stack.Navigator>
   )
 }
 

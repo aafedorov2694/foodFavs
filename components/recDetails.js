@@ -1,27 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Alert, CommonActions } from 'react-native';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { Alert } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { ThemeProvider, Card, Button, Text } from 'react-native-elements';
-import { Divider } from 'react-native-elements/dist/divider/Divider';
 import { theme } from '../styling/theme';
-
-
-var firebaseConfig = {
-  apiKey: "AIzaSyBVwG1pX_vDuJFxatenqzSQiVhwKL6MP3U",
-  authDomain: "foodfavs-b35b7.firebaseapp.com",
-  databaseURL: "https://foodfavs-b35b7-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "foodfavs-b35b7",
-  storageBucket: "foodfavs-b35b7.appspot.com",
-  messagingSenderId: "248221142948",
-  appId: "1:248221142948:web:c679388398b1ce145efb31"
-};
-
-if (!firebase.apps.length) {
-  console.log('Connected with Firebase')
-  firebase.initializeApp(firebaseConfig);
-}
 
 
 

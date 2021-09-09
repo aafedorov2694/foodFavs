@@ -1,11 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View } from 'react-native';
-import { ThemeProvider, ListItem, Image, Button, Tile, Card } from 'react-native-elements';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { Text, View } from 'react-native';
+import { ThemeProvider, Tile, Card } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
-import { Pressable, TouchableOpacity } from 'react-native';
 import { theme } from '../styling/theme';
 
 

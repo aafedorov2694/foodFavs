@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FlatList, View, Text } from 'react-native';
-import { Button, ThemeProvider, Tile, Input } from 'react-native-elements';
-import { useState } from 'react/cjs/react.development';
+import { ThemeProvider, Tile } from 'react-native-elements';
 import { theme } from '../styling/theme';
 import { Searchbar } from 'react-native-paper';
 import { Alert } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 
 export default function firstPage({ route, navigation }) {
   const foodType = [
@@ -18,7 +16,7 @@ export default function firstPage({ route, navigation }) {
   const [search, setSearch] = useState('');
 
   const iconPress = () => {
-    search !== '' ? navigation.navigate('Stacks', { screen: 'Search', params: { search: search } }) : (Alert.alert('What are you searching for?'));
+    search !== '' ? navigation.navigate('Search',  { search: search }) : (Alert.alert('What are you searching for?'));
     setSearch('')
   }
 
@@ -45,7 +43,7 @@ export default function firstPage({ route, navigation }) {
             <Tile
               imageSrc={{ uri: item.image }}
               title={<Text>{item.title}</Text>}
-              onPress={() => navigation.navigate('Stacks', { screen: 'Random Recipe', params: { searchItem: item.link, title: item.title } })}
+              onPress={() => navigation.navigate('Random Recipe', { searchItem: item.link, title: item.title })}
             />
           </View>
         }
