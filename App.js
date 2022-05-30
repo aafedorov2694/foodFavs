@@ -17,6 +17,7 @@ import savedRecDetails from './components/savedRecDetails';
 import { firebaseConfig } from './configs/firebaseConfig';
 import { TabBar } from './styling/tabStyle'
 import { Icon } from 'react-native-elements/dist/icons/Icon'
+import { View } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,7 +96,8 @@ export default function App() {
         </Stack.Navigator>
       )
       }
-    </NavigationContainer>
+    </NavigationContainer> 
+    
   );
 
 
